@@ -7,6 +7,7 @@ import configparser
 import random
 from utils.cv_match import cvMatch
 from utils.screen_capture import ScreenCapture
+from utils.window_control import WindowControl
 
 
 class FarmBotCV:
@@ -62,6 +63,7 @@ class FarmBotCV:
         self.pause_status = False
         self.now_scene = "home"     # 判断当前所在的场景
         self.screen_capture = ScreenCapture("QQ经典农场")
+        self.window_control = WindowControl("QQ经典农场")
         self.cv_match = cvMatch()
         self.is_friend_has_task = True
         self.start_friend_check_colddown_time = None
@@ -307,11 +309,19 @@ class FarmBotCV:
             screen_coord: 屏幕绝对坐标 (x, y)
             duration: 鼠标按下持续时间，默认 0.1 秒
         '''
-        # 加入随机值机制,在目标坐标点基础上随机向四周偏移不超过3像素
+        # 加入随机值机制，在目标坐标点基础上随机向四周偏移不超过 3 像素
         random_x_px = random.randint(-3, 3)
         random_y_px = random.randint(-3, 3)
-        pyautogui.click(screen_coord[0] + random_x_px, screen_coord[1] + random_y_px, duration=duration)
-        self.logger.debug(f"原坐标：{screen_coord}, 随机偏移：{random_x_px}, {random_y_px}, 最终点击坐标：{screen_coord[0] + random_x_px}, {screen_coord[1] + random_y_px}")
+        target_x = screen_coord[0] + random_x_px
+        target_y = screen_coord[1] + random_y_px
+        
+        # 使用后台窗口控制进行点击
+        success = self.window_control.click(target_x, target_y, duration)
+        
+        if success:
+            self.logger.debug(f"原坐标：{screen_coord}, 随机偏移：{random_x_px}, {random_y_px}, 最终点击坐标：{target_x}, {target_y}")
+        else:
+            self.logger.error(f"后台点击失败，坐标：{target_x}, {target_y}")
 
     def check_help_remove_bugs(self, game_frame):
         '''
