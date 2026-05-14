@@ -359,7 +359,7 @@ class FarmBotCV:
                 dog_house_center = self.get_dog_house_position(game_frame)
                 if dog_house_center:
                     target_x = dog_house_center[0]
-                    target_y = dog_house_center[1] - 20  # 点击狗屋上方20像素的空白位置
+                    target_y = dog_house_center[1] - 80  # 点击狗屋上方80像素的空白位置
                     self.click_at_position(self.convert_to_screen_coordinate((target_x, target_y)))
                 else:
                     self.click_at_position(self.convert_to_screen_coordinate((200, 270)))
