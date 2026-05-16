@@ -1011,15 +1011,15 @@ class FarmBotCV:
 
         dog_house_x, dog_house_y = dog_house_center[0], dog_house_center[1]
         self.logger.debug(f"【狗屋】坐标为：{dog_house_x, dog_house_y}")
-        FIRST_FIELD_OFFSET_X = 25
-        FIRST_FIELD_OFFSET_Y = 82
+        FIRST_FIELD_OFFSET_X = 27
+        FIRST_FIELD_OFFSET_Y = 85
         field_offset_map = {
-                                0:(0, 0), 1:(37,20),2:(73,38),3:(109,57),
-                                4:(-35,20),5:(1,36),6:(37,56),7:(72,75),
-                                8:(-71,39),9:(-39,56),10:(1,75),11:(37,93),
-                                12:(-109,57),13:(-74,73),14:(-39,93),15:(1,111),
-                                16:(-147,75),17:(-108,94),18:(-74,111),19:(-34,130),
-                                20:(-181,93),21:(-146,112),22:(-109,128),23:(-75,149),
+            0: (0, 0),          1: (38, 20),        2: (76, 40),        3: (114, 60),
+            4: (-38, 20),       5: (0, 40),         6: (38, 60),        7: (76, 80),
+            8: (-76, 40),       9: (-38, 60),       10: (0, 80),        11: (38, 100),
+            12: (-114, 60),     13: (-76, 80),      14: (-38, 100),     15: (0, 120),
+            16: (-152, 80),     17: (-114, 100),    18: (-76, 120),     19: (-38, 140),
+            20: (-190, 100),    21: (-152, 120),    22: (-114, 140),    23: (-76, 160),
         }
 
         first_field_pos_x = dog_house_x + FIRST_FIELD_OFFSET_X
@@ -1056,7 +1056,8 @@ class FarmBotCV:
             return True
         else:
             self.logger.info(f"第{now_field_idx+1}块地为【未种植】的土地,准备播种")
-            seed_x_pos = now_field_pos_x
+            # 随机向右偏移5-50像素，防止点击到不兼容的4格作物的种子
+            seed_x_pos = now_field_pos_x + random.randint(5, 50)
             seed_y_pos = now_field_pos_y + 70
             screen_center = self.convert_to_screen_coordinate((seed_x_pos,seed_y_pos))
             self.click_at_position(screen_center)
