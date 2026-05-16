@@ -33,11 +33,14 @@ print("="*50)
 def field_test(i):
     game_frame = bot.screen_capture.get_window_frame()
     dog_house_center = bot.get_dog_house_position(game_frame)
+    if dog_house_center is None:
+        time.sleep(1)
+        return False
     dog_house_x, dog_house_y = dog_house_center[0], dog_house_center[1]
     print(f"【狗屋】坐标为：{dog_house_x, dog_house_y}")
 
-    FIRST_FIELD_OFFSET_X = 27
-    FIRST_FIELD_OFFSET_Y = 85
+    FIRST_FIELD_OFFSET_X = 22
+    FIRST_FIELD_OFFSET_Y = 75
     field_offset_map = {
         0: (0, 0),          1: (38, 20),        2: (76, 40),        3: (114, 60),
         4: (-38, 20),       5: (0, 40),         6: (38, 60),        7: (76, 80),

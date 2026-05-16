@@ -1011,8 +1011,8 @@ class FarmBotCV:
 
         dog_house_x, dog_house_y = dog_house_center[0], dog_house_center[1]
         self.logger.debug(f"【狗屋】坐标为：{dog_house_x, dog_house_y}")
-        FIRST_FIELD_OFFSET_X = 27
-        FIRST_FIELD_OFFSET_Y = 85
+        FIRST_FIELD_OFFSET_X = 22
+        FIRST_FIELD_OFFSET_Y = 75
         field_offset_map = {
             0: (0, 0),          1: (38, 20),        2: (76, 40),        3: (114, 60),
             4: (-38, 20),       5: (0, 40),         6: (38, 60),        7: (76, 80),
@@ -1050,6 +1050,8 @@ class FarmBotCV:
             self.logger.debug(f"未检测关闭按钮")
 
         # 检查是否可以种植种子
+        time.sleep(0.2)
+        # 略微增加延迟，防止第1-4块地的铲除图标还没有从屏幕外回正时就开始检查导致识别不到
         match_result, max_val, threshold = self.cv_match.match_template(game_frame, self.remove_seed_frame, threshold=self.remove_seed_frame_threshold)
         if match_result is not None:
             self.logger.info(f"第{now_field_idx+1}块地为【已种植】的土地")
