@@ -1056,6 +1056,19 @@ class FarmBotCV:
             return True
         else:
             self.logger.info(f"第{now_field_idx+1}块地为【未种植】的土地,准备播种")
+            # 更新游戏画面，重新获取土地的坐标,防止点击屏幕左侧边缘的土地后，直接点击原来的土地坐标下方位置，导致点到不兼容的4格占地的作物种子
+            game_frame = self.screen_capture.get_window_frame()
+            dog_house_center = self.get_dog_house_position(game_frame)
+            if dog_house_center is None:
+                self.logger.warning(f"未检测到【狗屋】，无法定位空地并种植种子")
+                return False
+            dog_house_x, dog_house_y = dog_house_center[0], dog_house_center[1]
+            self.logger.debug(f"【狗屋】坐标为：{dog_house_x, dog_house_y}")
+            first_field_pos_x = dog_house_x + FIRST_FIELD_OFFSET_X
+            first_field_pos_y = dog_house_y + FIRST_FIELD_OFFSET_Y
+            field_offset_x, field_offset_y = field_offset_map[now_field_idx]
+            now_field_pos_x = first_field_pos_x + field_offset_x
+            now_field_pos_y = first_field_pos_y + field_offset_y
             # 随机向右偏移5-50像素，防止点击到不兼容的4格作物的种子
             seed_x_pos = now_field_pos_x + random.randint(5, 50)
             seed_y_pos = now_field_pos_y + 70
